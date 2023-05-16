@@ -5,10 +5,10 @@ An exploration in predicting future values of the Lorenz equations using various
 Riley Estes
 
 ### Abstract
-A simple Feed-Forward Neural Network, Long Short-Term Neural Network, Recurrent Neural network, and Echo State Network are all standardized to the same 3 layer shape with the same hyperparameters and tested on their abilities to predict the solutions to the Lorenz equations when the value of rho in the equations changes. The feed-forward neural network performs the best by far, with the RNN coming in second place, and the other two methods performing very poorly. Seeing as the two best solutions are also the simplist in terms of model complexity, it would seem that solving the Lorenz equations are not as complicated as one would seem, or that the more complicated models are more prone to "overthinking" the solution. 
+A simple Feed-Forward Neural Network, Long Short-Term Neural Network, Recurrent Neural network, and Echo State Network are all standardized to the same 3 layer shape with the same hyperparameters and tested on their abilities to predict the solutions to the Lorenz equations when the value of rho in the equations changes. The feed-forward neural network performs the best by far, with the RNN coming in second place, and the other two methods performing very poorly. Seeing as the two best solutions are also the simplest in terms of model complexity, it would seem that solving the Lorenz equations are not as complicated as one would seem, or that the more complicated models are more prone to "overthinking" the solution. 
 
 ### Introduction and Overview
-The program aims to train neural networks in order to predict the solution to the Lorenz equations one step ahead of the current point. The Lorenz equations are notorious for being computationally unsolvable and only estimatable by calculating one point after another with mathematical techniques. Instead of using these techniques, we can instead use a neural network. To do so, 4 different neural network architectures will be tested for this application and the mean-squared errors of each compared. They are: Feed-Forward, Long Short-Term Memory, Recurrent Neural Network, and Echo State Network. 
+The program aims to train neural networks in order to predict the solution to the Lorenz equations one step ahead of the current point. The Lorenz equations are notorious for being computationally unsolvable and only estimable by calculating one point after another with mathematical techniques. Instead of using these techniques, we can instead use a neural network. To do so, 4 different neural network architectures will be tested for this application and the mean-squared errors of each are compared. They are: Feed-Forward, Long Short-Term Memory, Recurrent Neural Network, and Echo State Network. The predicting ability of each model will be tested by predicting the solutions to the Lorenz equations with different rho values in the equations. 
 
 ### Theoretical Background
 
@@ -20,16 +20,16 @@ The Lorenz equations are a system of ordinary differential equations that descri
 A Neural Network, also known as a Multi-Layer Perceptron (MLP) is a machine learning algorithm where data passes through a series of layers of nodes connected with each other (fully or partially) by weights. This creates a nonlinear and very complicated network because each node in a layer is generally connected to all the nodes in the next layer, each with its own weight. That means that each node in a layer is the sum of all of the nodes in the last layer multiplied by each connection's particular weight. These networks require training with a training set, and are then tested on a test set of data. In training, the values of all the weights are updated (using backpropagation) based on the incoming data (and its labels for supervised learning). The model can then be tested on the test data to see how well it processed the training data, and how well its weights are set to achieve the data processing task. Neural Networks often perform very well on complicated tasks, but require huge amounts of data to do so. 
 
 #### Feed-Forward Neural Network
-A Feed-Forward Neural Network is one that has a linear flow of data from the input to the output. That is, there are no loops or ways data can be repeated or looped in the network. This is the simplist neural network design.
+A Feed-Forward Neural Network is one that has a linear flow of data from the input to the output. That is, there are no loops or ways data can be repeated or looped in the network. This is the simplest neural network design.
 
 #### Long Short-Term Memory Neural Network (LSTM)
 An LSTM is a type of Neural Network that is designed to process sequential data. Similar to a Recurrent Neural Network, an LSTM creates feedback loops so that it can "remember" data and use previous data in order to process current data. In addition to this however, the LSTM implements a memory cell where it can selectively store and access data in these cells for later use when processing future information. It adds an extra layer of memory to the Recurrent Neural Network design to further increase its temporal processing abilities. 
 
-#### Recurrent Neural Network (RMM)
-An RMM is a type of neural network designed to process sequential/time dependent data. Unlike feedforward neural networks that process data in a single forward pass, an RNN introduces the concept of "recurrence" by allowing information to persist and be passed from one step to the next. This enables the network to maintain an internal memory or state that captures the context and temporal dependencies of the sequential data. This allows the network to notice time-based patterns. 
+#### Recurrent Neural Network (RNN)
+An RNN is a type of neural network designed to process sequential/time dependent data. Unlike feedforward neural networks that process data in a single forward pass, an RNN introduces the concept of "recurrence" by allowing information to persist and be passed from one step to the next. This enables the network to maintain an internal memory or state that captures the context and temporal dependencies of the sequential data. This allows the network to notice time-based patterns. 
 
 #### Echo State Network (ESN)
-An ESN (also known as a reservoir computing system) is a type of RNN where the recurrent connections within the network form a randomly initialized and fixed "reservoir" of neurons. The random initalization of the fixed reservoir weights ensures complexity in the model. These reservoir neurons have recurrent connections among themselves, creating a dynamic system capable of storing and processing information over time. Uniquely, only the connections from the reservoir to the output layer are learned, while the connections within the reservoir itself remain fixed. This means that during training, only the weights from the reservoir to the output layer are adjusted to learn the desired mapping or prediction task. 
+An ESN (also known as a reservoir computing system) is a type of RNN where the recurrent connections within the network form a randomly initialized and fixed "reservoir" of neurons. The random initialization of the fixed reservoir weights ensures complexity in the model. These reservoir neurons have recurrent connections among themselves, creating a dynamic system capable of storing and processing information over time. Uniquely, only the connections from the reservoir to the output layer are learned, while the connections within the reservoir itself remain fixed. This means that during training, only the weights from the reservoir to the output layer are adjusted to learn the desired mapping or prediction task. 
 
 ### Algorithm Implementation and Development
 Firstly, some parameters for calculating the Lorenz equations and defining one step in time are initialized:
@@ -47,13 +47,13 @@ def lorenz_deriv(x_y_z, t0, sigma=sigma, beta=beta, rho=rho):
   x, y, z = x_y_z
   return [sigma * (y - x), x * (rho - z) - y, x * y - beta * z]
 ```
-generate_data is defined to generate the solved pathways in x_t that the initial points in x0 take according to teh Lorenz equations. integrate.odeint makes these calculations for 100 random points:
+generate_data is defined to generate the solved pathways in x_t that the initial points in x0 take according to the Lorenz equations. integrate.odeint makes these calculations for 100 random points:
 ```
 x_t = np.asarray([integrate.odeint(lorenz_deriv, x0_j, t, args=(sigma, beta, rho)) for x0_j in x0])
 ```
 nn_input is populated as each point in the generated pathways in dt long time intervals. nn_output is the nn_input array at t + 1, (or t + dt) which will act as a labels/ground truth array for the neural network training when given the nn_input array to train on. 
 
-The LorenzModel feed-forward neural network is defined with the following layers connected with ReLu activations:
+The LorenzModel feed-forward neural network is defined with the following layers connected with ReLU activations:
 ```
 self.fc1 = nn.Linear(6, 128)
 self.fc2 = nn.Linear(128, 128)
@@ -76,7 +76,7 @@ for epoch in range(30):
 ```
 All models in this program are trained in a very similar way for 30 epochs per value of rho. 
 
-Then, for rho values 17 and 35, each model is tested in a similar way to the feed forward here:
+Then, for rho values 17 and 35, each model is tested in a similar way to the feed-forward here:
 ```
 predictions = model(nn_input_tensor)
 loss = criterion(predictions, nn_output_tensor)
