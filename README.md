@@ -103,7 +103,7 @@ For rho = 35, the feed-forward NN had a loss of only 0.3690 and generated this p
 
 To be compared against the ground truth for rho = 35:
 
-<br> <img src="https://github.com/rileywe/Lorenz-Equations-with-NN/blob/main/LorenzOutputImgs/35GT.png" width="400"/>
+<br> <img src="https://github.com/rileywe/Lorenz-Equations-with-NN/blob/main/LorenzOutputImgs/GT35.png" width="400"/>
 
 Note that in the predictions, the lines don't connect to the same random starting points because the model's first prediction is t + dt, so where the point is after dt time has passed. 
 The model only took 16 seconds to train as well, making these results very efficient. Although the loss would increase after changing the value of rho, the model could quickly and effectively readjust for it, and by the third value of rho, had already become very accurate and adaptable. This was seen in the test loss as well. The model is slightly biased towards the training data it saw last, which explains why the test loss on rho = 17 is higher than the loss for rho = 35. For the time this model took to train, the results are superb, and proves to be very adaptable to different values of rho and changing datasets. 
